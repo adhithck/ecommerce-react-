@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -14,9 +14,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/adhithck/ecommerce-react-/issues"
   },
-  "homepage": "https://github.com/adhithck/ecommerce-react-#readme"
+  "homepage": "https://github.com/adhithck/ecommerce-react-#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie": "^1.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.1",
+    "multer": "^2.0.2"
+  }
 }
