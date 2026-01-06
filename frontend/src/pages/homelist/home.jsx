@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../features/product/productSlice";
 import Navbar from "../../components/Navbar";
-import ProductCard from "../../components/productCard";
+import Hero from "../../components/Hero";
+import ProductGrid from "../../components/ProductGrid";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -12,17 +13,17 @@ export default function Home() {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (status === "loading") {
-    return <p className="text-white p-6">Loading products...</p>;
-  }
-
   return (
     <>
       <Navbar />
-      <main className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 bg-[#020617] min-h-screen">
-        {list.map((p) => (
-          <ProductCard key={p._id} product={p} />
-        ))}
+      <main className="p-6 bg-[#020617] min-h-screen">
+        <Hero />
+
+        {status === "loading" && (
+          <p className="text-gray-400 mt-6">Loading products from backend…</p>
+        )}
+
+        {status === "succeeded" && <ProductGrid products={list} />}
       </main>
     </>
   );

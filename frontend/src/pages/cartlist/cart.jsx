@@ -1,51 +1,42 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/Navbar";
-import { removeFromCart } from "../../features/cart/cartSlice";
-import { Link } from "react-router-dom";
+import CartItem from "../../components/CartItem";
+import CartSummary from "../../components/CartSummary";
+import { fetchCart } from "../../features/cart/cartSlice";
 
 export default function Cart() {
-  const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
+  const items = useSelector((state) => state.cart.items);
 
   useEffect(() => {
-  dispatch(fetchCart());
-}, []);
-
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   return (
     <>
       <Navbar />
-      <div className="p-6 bg-[#020617] min-h-screen text-gray-200">
-        <h1 className="text-xl font-bold mb-4">Your Cart</h1>
 
-        {cart.length === 0 && (
-          <p className="text-gray-400">Cart is empty</p>
-        )}
+      <main className="p-6 bg-[#020617] min-h-screen grid grid-cols-1 lg:grid-cols-[2.3fr_1.1fr] gap-6 text-gray-200">
+        {/* Cart Items */}
+        <section className="bg-[#020617] border border-gray-800 rounded-xl p-5">
+          <h2 className="font-semibold mb-4">Your Shopping Cart</h2>
 
-        {cart.map((item) => (
-          <div
-            key={item.id}
-            className="flex justify-between bg-black p-4 mb-3 rounded"
-          >
-            <span>{item.name}</span>
-            <button
-              onClick={() => dispatch(removeFromCart(item.id))}
-              className="text-red-400"
-            >
-              Remove
-            </button>
+          {items.length === 0 && (
+            <p className="text-gray-400 text-sm">
+              Your cart is empty.
+            </p>
+          )}
+
+          <div className="flex flex-col gap-4">
+            {items.map((item) => (
+              <CartItem key={item.productId._id} item={item} />
+            ))}
           </div>
-        ))}
+        </section>
 
-        {cart.length > 0 && (
-          <Link
-            to="/checkout"
-            className="inline-block mt-4 bg-yellow-400 text-black px-6 py-2 rounded-full"
-          >
-            Checkout
-          </Link>
-        )}
-      </div>
+        <CartSummary items={items} />
+      </main>
     </>
   );
 }
