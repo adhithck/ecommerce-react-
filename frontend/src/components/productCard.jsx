@@ -1,11 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const lowStock = product.countInStock <= 3;
+
+  const handleAddToCart = () => {
+    const token = localStorage.getItem("token");
+
+    // 🔐 Not logged in → go to login page
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    // ✅ Logged in → add to cart
+    dispatch(addToCart(product._id));
+  };
 
   return (
     <div className="relative bg-[#020617] border border-gray-800 rounded-xl p-4 shadow-lg">
@@ -53,7 +67,7 @@ export default function ProductCard({ product }) {
       {/* Actions */}
       <div className="flex gap-2 mt-4">
         <button
-          onClick={() => dispatch(addToCart(product._id))}
+          onClick={handleAddToCart}
           className="flex-1 bg-yellow-400 text-black text-xs py-2 rounded-full font-semibold"
         >
           Add to Cart
