@@ -1,34 +1,29 @@
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
 
 export default function ProductCard({ product }) {
-  const dispatch = useDispatch();
-
   return (
-    <div className="bg-black border border-gray-800 rounded-xl p-4">
-      <div className="h-40 bg-gray-900 rounded mb-3" />
+    <div className="bg-white p-4 rounded shadow hover:shadow-lg transition">
+      {/* Image */}
+      <div className="h-40 bg-gray-200 mb-3 flex items-center justify-center rounded">
+        Image
+      </div>
 
-      <h3 className="font-semibold text-sm text-gray-200">
+      {/* Name */}
+      <h3 className="font-medium text-sm mb-1">
         {product.name}
       </h3>
 
-      <p className="text-yellow-400 font-bold mt-1">
+      {/* Price */}
+      <p className="text-lg font-bold text-yellow-500">
         ₹{product.price}
       </p>
 
-      <button
-        onClick={() => dispatch(addToCart(p._id))}
-        className="w-full mt-3 bg-yellow-400 text-black py-2 rounded-full text-sm"
-      >
-        Add to Cart
-      </button>
-
+      {/* Navigate using backend _id */}
       <Link
         to={`/product/${product._id}`}
-        className="block text-center text-sm mt-2 text-yellow-400"
+        className="block mt-3 bg-yellow-400 hover:bg-yellow-500 text-center py-2 rounded font-semibold"
       >
-        View
+        View Product
       </Link>
     </div>
   );

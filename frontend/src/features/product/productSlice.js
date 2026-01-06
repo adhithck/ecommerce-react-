@@ -1,11 +1,20 @@
-// features/product/productSlice.jsx
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../api/api";
 
+/* ===== FETCH PRODUCTS ===== */
 export const fetchProducts = createAsyncThunk(
-  "products/fetch",
+  "product/fetchAll",
   async () => {
     const res = await API.get("/products");
+    return res.data;
+  }
+);
+
+/* ===== FETCH SINGLE PRODUCT ===== */
+export const fetchProductById = createAsyncThunk(
+  "product/fetchOne",
+  async (id) => {
+    const res = await API.get(`/products/${id}`);
     return res.data;
   }
 );
@@ -13,22 +22,22 @@ export const fetchProducts = createAsyncThunk(
 const productSlice = createSlice({
   name: "product",
   initialState: {
-    list: [],
-    status: "idle",
-    error: null,
+    products: [],
+    product: null,
+    loading: false,
   },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.list = action.payload;
+        state.loading = false;
+        state.products = action.payload;
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
+      .addCase(fetchProductById.fulfilled, (state, action) => {
+        state.product = action.payload;
       });
   },
 });
