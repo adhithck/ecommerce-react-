@@ -27,66 +27,84 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#020617] px-4">
-      <div className="w-full max-w-sm bg-black border border-gray-800 rounded-2xl p-6 text-gray-200 shadow-xl">
-        
-        {/* Logo */}
-        <h1 className="text-2xl font-extrabold text-center mb-1">
-          Dark<span className="text-yellow-400">.</span>Cart
-        </h1>
-        <p className="text-center text-xs text-gray-500 mb-6">
-          Welcome back
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#020617] via-black to-[#020617] px-4">
+      <div className="relative w-full max-w-sm rounded-3xl p-[1px] bg-gradient-to-br from-yellow-400/30 to-transparent">
+        <div className="bg-[#020617]/90 backdrop-blur-xl rounded-3xl p-7 text-gray-200 shadow-2xl">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          
-          {/* Email */}
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Email address"
-            required
-            className="w-full bg-[#020617] border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-400 transition"
-          />
+          {/* Logo */}
+          <h1 className="text-3xl font-extrabold text-center tracking-wide mb-1">
+            Dark<span className="text-yellow-400">.</span>Cart
+          </h1>
+          <p className="text-center text-xs text-gray-400 mb-6">
+            Sign in to continue shopping
+          </p>
 
-          {/* Password */}
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-            className="w-full bg-[#020617] border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-400 transition"
-          />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            
+            {/* Email */}
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">
+                Email address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className="w-full bg-black/40 border border-gray-700 rounded-xl px-3 py-2 text-sm
+                           focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400
+                           transition"
+              />
+            </div>
 
-          {/* Error */}
-          {error && (
-            <p className="text-red-400 text-xs">{error}</p>
-          )}
+            {/* Password */}
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                className="w-full bg-black/40 border border-gray-700 rounded-xl px-3 py-2 text-sm
+                           focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400
+                           transition"
+              />
+            </div>
 
-          {/* Button */}
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold text-sm hover:brightness-110 transition disabled:opacity-60"
-          >
-            {status === "loading" ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
+            {/* Error */}
+            {error && (
+              <p className="text-red-400 text-xs text-center">
+                {error}
+              </p>
+            )}
 
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-5">
-          Don’t have an account?{" "}
-          <Link
-            to="/register"
-            className="text-yellow-400 hover:underline"
-          >
-            Create one
-          </Link>
-        </p>
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="w-full mt-2 bg-yellow-400 text-black py-2.5 rounded-xl font-semibold text-sm
+                         hover:brightness-110 transition disabled:opacity-60
+                         active:scale-[0.98]"
+            >
+              {status === "loading" ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="text-center text-xs text-gray-400 mt-6">
+            Don’t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-yellow-400 hover:underline font-medium"
+            >
+              Create one
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

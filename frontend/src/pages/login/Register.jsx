@@ -27,7 +27,7 @@ export default function Register() {
     try {
       await API.post("/auth/register", form);
       navigate("/login");
-    } catch (err) {
+    } catch {
       setError("Registration failed");
     } finally {
       setLoading(false);
@@ -35,69 +35,102 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#020617] px-4">
-      <div className="w-full max-w-sm bg-black border border-gray-800 rounded-2xl p-6 text-gray-200 shadow-xl">
-        
-        <h1 className="text-2xl font-extrabold text-center mb-1">
-          Create account
-        </h1>
-        <p className="text-center text-xs text-gray-500 mb-6">
-          Join DarkCart today
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#020617] via-black to-[#020617] px-4">
+      {/* Gradient border */}
+      <div className="relative w-full max-w-sm rounded-3xl p-[1px] bg-gradient-to-br from-yellow-400/30 to-transparent">
+        <div className="bg-[#020617]/90 backdrop-blur-xl rounded-3xl p-7 text-gray-200 shadow-2xl">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Full name"
-            required
-            className="w-full bg-[#020617] border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-400"
-          />
+          {/* Logo / Title */}
+          <h1 className="text-3xl font-extrabold text-center tracking-wide mb-1">
+            Dark<span className="text-yellow-400">.</span>Cart
+          </h1>
+          <p className="text-center text-xs text-gray-400 mb-6">
+            Create your account
+          </p>
 
-          <input
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Email address"
-            required
-            className="w-full bg-[#020617] border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-400"
-          />
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-          <input
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-            className="w-full bg-[#020617] border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yellow-400"
-          />
+            {/* Name */}
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">
+                Full name
+              </label>
+              <input
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                className="w-full bg-black/40 border border-gray-700 rounded-xl px-3 py-2 text-sm
+                           focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400
+                           transition"
+              />
+            </div>
 
-          {error && (
-            <p className="text-red-400 text-xs">{error}</p>
-          )}
+            {/* Email */}
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">
+                Email address
+              </label>
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className="w-full bg-black/40 border border-gray-700 rounded-xl px-3 py-2 text-sm
+                           focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400
+                           transition"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold text-sm hover:brightness-110 transition disabled:opacity-60"
-          >
-            {loading ? "Creating account..." : "Register"}
-          </button>
-        </form>
+            {/* Password */}
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">
+                Password
+              </label>
+              <input
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                className="w-full bg-black/40 border border-gray-700 rounded-xl px-3 py-2 text-sm
+                           focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400
+                           transition"
+              />
+            </div>
 
-        <p className="text-center text-xs text-gray-400 mt-5">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-yellow-400 hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
+            {/* Error */}
+            {error && (
+              <p className="text-red-400 text-xs text-center">
+                {error}
+              </p>
+            )}
+
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-2 bg-yellow-400 text-black py-2.5 rounded-xl font-semibold text-sm
+                         hover:brightness-110 transition disabled:opacity-60
+                         active:scale-[0.98]"
+            >
+              {loading ? "Creating account..." : "Create account"}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="text-center text-xs text-gray-400 mt-6">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-yellow-400 hover:underline font-medium"
+            >
+              Sign in
+            </Link>
+          </p>
+
+        </div>
       </div>
     </div>
   );
