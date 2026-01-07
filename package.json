@@ -22,5 +22,8 @@
   "homepage": "https://github.com/adhithck/ecommerce-react-#readme",
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "redux-persist": "^6.0.0"
   }
 }
