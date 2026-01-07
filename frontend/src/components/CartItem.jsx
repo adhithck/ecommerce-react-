@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { addToCart, removeFromCart } from "../features/cart/cartSlice";
+import { addToCart, removeFromCart } from "../store/slice/cartSlice";
 
 export default function CartItem({ item }) {
   const dispatch = useDispatch();
@@ -18,17 +18,13 @@ export default function CartItem({ item }) {
 
       {/* Info */}
       <div className="flex flex-col gap-1">
-        <h3 className="text-sm font-semibold">
-          {product.title}
-        </h3>
+        <h3 className="text-sm font-semibold">{product.title}</h3>
 
         <p className="text-xs text-gray-400">
           Category: {product.category || "General"}
         </p>
 
-        <p className="text-yellow-400 font-bold">
-          ₹{product.price}
-        </p>
+        <p className="text-yellow-400 font-bold">₹{product.price}</p>
 
         <div className="flex justify-between items-center mt-2 flex-wrap gap-2">
           {/* Quantity */}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/Navbar";
 import CartItem from "../../components/CartItem";
 import CartSummary from "../../components/CartSummary";
-import { fetchCart } from "../../features/cart/cartSlice";
+import { fetchCart } from "../../store/slice/cartSlice";
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -23,9 +23,7 @@ export default function Cart() {
           <h2 className="font-semibold mb-4">Your Shopping Cart</h2>
 
           {items.length === 0 && (
-            <p className="text-gray-400 text-sm">
-              Your cart is empty.
-            </p>
+            <p className="text-gray-400 text-sm">Your cart is empty.</p>
           )}
 
           <div className="flex flex-col gap-4">

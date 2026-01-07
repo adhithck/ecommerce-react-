@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../features/product/productSlice";
+import { fetchProducts } from "../../store/slice/productSlice";
 import Navbar from "../../components/Navbar";
 import Hero from "../../components/Hero";
 import ProductGrid from "../../components/ProductGrid";

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/Navbar";
 import CheckoutForm from "../../components/CheckoutForm";
 import OrderSummary from "../../components/OrderSummary";
-import { fetchCart } from "../../features/cart/cartSlice";
+import { fetchCart } from "../../store/slice/cartSlice";
 
 export default function Checkout() {
   const dispatch = useDispatch();
