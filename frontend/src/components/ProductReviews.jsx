@@ -1,12 +1,36 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { submitReview } from "../store/slice/productSlice";
 
 export default function ProductReviews({ product }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
 
-  const submitReview = () => {
+  const submitHandler = () => {
+    // 🔐 must be logged in
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
     if (!rating || !comment) return;
-    alert("Review submission API hook goes here");
+
+    dispatch(
+      submitReview({
+        productId: product._id,
+        rating,
+        comment,
+      })
+    );
+
+    // reset form
+    setRating("");
+    setComment("");
   };
 
   return (
@@ -21,12 +45,18 @@ export default function ProductReviews({ product }) {
         <div key={review._id} className="border-t border-gray-800 pt-3 mt-3">
           <div className="flex justify-between text-sm">
             <span className="font-semibold">{review.name}</span>
-            <span className="text-gray-500">{review.createdAt}</span>
+            <span className="text-gray-500">
+              {new Date(review.createdAt).toLocaleDateString()}
+            </span>
           </div>
+
           <div className="text-yellow-400 text-sm">
             {"★".repeat(review.rating)}
           </div>
-          <p className="text-gray-400 text-sm mt-1">{review.comment}</p>
+
+          <p className="text-gray-400 text-sm mt-1">
+            {review.comment}
+          </p>
         </div>
       ))}
 
@@ -55,7 +85,7 @@ export default function ProductReviews({ product }) {
         />
 
         <button
-          onClick={submitReview}
+          onClick={submitHandler}
           className="mt-2 bg-yellow-400 text-black px-4 py-2 rounded-full text-sm font-semibold"
         >
           Submit Review

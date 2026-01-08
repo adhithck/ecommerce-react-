@@ -1,21 +1,38 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import Navbar from "../../components/Navbar";
 import ProductImages from "../../components/ProductImages";
 import ProductInfo from "../../components/ProductInfo";
 import BuyBox from "../../components/BuyBox";
 import ProductReviews from "../../components/ProductReviews";
 
+import { fetchProductById } from "../../store/slice/productSlice";
+
 export default function Product() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  // ✅ FIRST: read from Redux
   const product = useSelector((state) =>
     state.product.list.find((p) => String(p._id) === id)
   );
 
+  // ✅ THEN: fetch if missing (reload / direct URL)
+  useEffect(() => {
+    if (!product) {
+      dispatch(fetchProductById(id));
+    }
+  }, [dispatch, id, product]);
+
   if (!product) {
-    return <div className="text-white p-6">Loading product…</div>;
+    return (
+      <>
+        <Navbar />
+        <div className="text-white p-6">Loading product…</div>
+      </>
+    );
   }
 
   return (

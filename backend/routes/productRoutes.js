@@ -5,6 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  addProductReview,
 } from "../controllers/productController.js";
 
 import { protect } from "../middleware/auth.js";
@@ -15,6 +16,7 @@ const router = express.Router();
 // Public routes
 router.get("/", listProducts);
 router.get("/:id", getProduct);
+router.post("/:id/reviews", protect, addProductReview);
 
 // Protected + RBAC routes
 router.post("/", protect, requirePermissions("product.create"), createProduct);
