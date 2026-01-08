@@ -6,13 +6,19 @@ import { useState } from "react";
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { isAuthenticated } = useSelector((s) => s.auth);
   const cartStatus = useSelector((s) => s.cart.status);
-
   const [added, setAdded] = useState(false);
 
   if (!product) return null;
+
+  const stock =
+    product.countInStock ??
+    product.stock ??
+    product.quantity ??
+    0;
+
+  const inStock = stock > 0;
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
@@ -23,64 +29,56 @@ export default function ProductCard({ product }) {
       return;
     }
 
-    setAdded(false);
+    if (!inStock) return;
 
     const res = await dispatch(addToCart(product._id));
-
     if (res.meta.requestStatus === "fulfilled") {
       setAdded(true);
-
-      // reset visual after 1.2s
       setTimeout(() => setAdded(false), 1200);
     }
   };
 
   return (
-    <div className="bg-black border border-gray-800 rounded-xl p-4 text-gray-200 hover:border-yellow-400 transition">
-      
-      {/* Image */}
-      {product.image && (
-        <Link to={`/product/${product._id}`}>
-          <img
-            src={product.image}
-            alt={product.title}
-            className="h-40 w-full object-contain mb-3 transition-transform hover:scale-105"
-          />
-        </Link>
-      )}
+    <div className="bg-black border border-gray-800 rounded-xl p-4 text-gray-200 flex flex-col hover:border-yellow-400 transition">
 
-      {/* Title */}
-      <h3 className="font-semibold text-sm mb-1 line-clamp-2">
+      <Link to={`/product/${product._id}`}>
+        <img
+          src={product.image}
+          alt={product.title}
+          className="h-40 w-full object-contain mb-3 hover:scale-105 transition-transform"
+        />
+      </Link>
+
+      <h3 className="text-sm font-semibold line-clamp-2">
         {product.title}
       </h3>
 
-      {/* Price */}
-      <p className="text-yellow-400 font-bold mb-3">
+      <p className="text-yellow-400 font-bold mt-1">
         ₹{product.price}
       </p>
 
-      {/* Add to Cart Button */}
-      <button
-        type="button"
-        onClick={handleAddToCart}
-        disabled={cartStatus === "loading"}
-        className={`
-          w-full py-2 rounded-full text-sm font-semibold
-          transition-all duration-300
-          ${
-            added
-              ? "bg-green-500 text-black scale-105"
-              : "bg-yellow-400 text-black hover:brightness-110 active:scale-95"
-          }
-          disabled:opacity-60 disabled:cursor-not-allowed
-        `}
-      >
-        {added
-          ? "✔ Added to Cart"
-          : cartStatus === "loading"
-          ? "Adding..."
-          : "Add to Cart"}
-      </button>
+      <p className={`text-xs mt-1 ${inStock ? "text-green-400" : "text-red-400"}`}>
+        {inStock ? `${stock} left in stock` : "Out of stock"}
+      </p>
+
+      <div className="mt-auto flex gap-2 pt-3">
+        <Link
+          to={`/product/${product._id}`}
+          className="flex-1 text-center border border-gray-700 text-gray-300 py-2 rounded-full text-xs hover:border-yellow-400 hover:text-yellow-400 transition"
+        >
+          View Details
+        </Link>
+
+        <button
+          onClick={handleAddToCart}
+          disabled={!inStock || cartStatus === "loading"}
+          className={`flex-1 py-2 rounded-full text-xs font-semibold transition
+            ${added ? "bg-green-500 text-black" : "bg-yellow-400 text-black hover:brightness-110"}
+            disabled:opacity-50 disabled:cursor-not-allowed`}
+        >
+          {added ? "✔ Added" : cartStatus === "loading" ? "Adding..." : "Add to Cart"}
+        </button>
+      </div>
     </div>
   );
 }
