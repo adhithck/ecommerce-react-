@@ -1,7 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import API from "../api/api";
+import { clearCart } from "../store/slice/cartSlice";
 
 export default function CheckoutForm({ items }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [address, setAddress] = useState({
     name: "",
     phone: "",
@@ -13,6 +19,7 @@ export default function CheckoutForm({ items }) {
 
   const [payment, setPayment] = useState("COD");
   const [status, setStatus] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
@@ -21,12 +28,8 @@ export default function CheckoutForm({ items }) {
   const placeOrder = async () => {
     setStatus("");
 
-    if (
-      !address.name ||
-      !address.line ||
-      !address.city ||
-      !address.postal
-    ) {
+    // 🛑 Validation
+    if (!address.name || !address.line || !address.city || !address.postal) {
       setStatus("Please fill all required address fields.");
       return;
     }
@@ -37,14 +40,37 @@ export default function CheckoutForm({ items }) {
     }
 
     try {
+      // ✅ BUILD ORDER PAYLOAD (THIS WAS MISSING)
+      const orderItems = items.map((item) => ({
+        product: item.productId._id,
+        qty: item.quantity,
+        price: item.productId.price,
+      }));
+
+      const total = items.reduce(
+        (sum, item) => sum + item.productId.price * item.quantity,
+        0
+      );
+
       await API.post("/orders", {
-        shippingAddress: address,
+        items: orderItems,
+        total,
         paymentMethod: payment,
       });
 
+      // ✅ success flow
+      setSuccess(true);
       setStatus("✅ Order placed successfully!");
+      dispatch(clearCart());
+
+      // ⏳ redirect to home
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+
     } catch (err) {
-      setStatus("❌ Failed to place order. Are you logged in?");
+      console.error("ORDER ERROR:", err.response?.data || err.message);
+      setStatus(err.response?.data?.message || "Order failed");
     }
   };
 
@@ -76,9 +102,7 @@ export default function CheckoutForm({ items }) {
       ))}
 
       {/* Payment */}
-      <h2 className="font-semibold mt-5 mb-2">
-        Payment Method
-      </h2>
+      <h2 className="font-semibold mt-5 mb-2">Payment Method</h2>
 
       <div className="flex flex-col gap-2 text-sm">
         {["COD", "Card", "PayPal"].map((p) => (
@@ -88,18 +112,18 @@ export default function CheckoutForm({ items }) {
               checked={payment === p}
               onChange={() => setPayment(p)}
             />
-            {p === "COD"
-              ? "Cash on Delivery"
-              : `${p} (mock)`}
+            {p === "COD" ? "Cash on Delivery" : `${p} (mock)`}
           </label>
         ))}
       </div>
 
       <button
         onClick={placeOrder}
-        className="mt-5 w-full bg-yellow-400 text-black py-2 rounded-full font-semibold text-sm"
+        disabled={success}
+        className="mt-5 w-full bg-yellow-400 text-black py-2 rounded-full font-semibold text-sm
+                   disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        Place Order
+        {success ? "Order Placed" : "Place Order"}
       </button>
 
       {status && (
