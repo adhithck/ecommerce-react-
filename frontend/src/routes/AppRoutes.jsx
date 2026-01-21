@@ -7,10 +7,9 @@ import Checkout from "../pages/checkoutlist/Checkout";
 import Login from "../pages/login/Login";
 import Register from "../pages/login/Register";
 import AdminRoute from "./AdminRoutes";
-import AdminDashboard from "../pages/admin/AdminDashboard";
-import AdminOrders from "../pages/admin/AdminOrders";
-import AdminProducts from "../pages/admin/AdminProducts";
-
+import AdminDashboard from "../pages/admin/adminDashboard";
+import AdminOrders from "../pages/admin/adminOrder";
+import AdminProducts from "../pages/admin/adminProducts";
 
 export default function AppRoutes() {
   return (
