@@ -1,8 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import connectDB from "./config/db.js";
 import { seedRoles } from "./config/authRoles.js";
@@ -16,14 +14,6 @@ dotenv.config();
 
 const app = express();
 
-/* ---------- DB ---------- */
-connectDB();
-
-/* ---------- SEED ROLES ---------- */
-(async () => {
-  await seedRoles();
-})();
-
 /* ---------- MIDDLEWARE ---------- */
 app.use(express.json());
 
@@ -33,9 +23,6 @@ app.use(
     credentials: true,
   })
 );
-
-
-
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend working" });
@@ -47,8 +34,21 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 
-/* ---------- SERVER ---------- */
+/* ---------- START SERVER ---------- */
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
-});
+
+async function start() {
+  try {
+    await connectDB();       // ✅ wait DB connect
+    await seedRoles();       // ✅ seed after connect
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Server startup failed:", error.message);
+    process.exit(1);
+  }
+}
+
+start();
