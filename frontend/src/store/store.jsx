@@ -5,6 +5,8 @@ import storageModule from "redux-persist/lib/storage";
 import cartReducer from "./slice/cartSlice";
 import productReducer from "./slice/productSlice";
 import authReducer from "./slice/authSlice";
+import adminOrderReducer from "./slice/adminOrderSlice";
+import adminProductReducer from "./slice/adminProductSlice";
 
 import { attachAuthInterceptor } from "../api/api";
 
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   product: productReducer,
   auth: authReducer,
+  adminOrders: adminOrderReducer,
+  adminProducts: adminProductReducer,
 });
 
 /* ---------- PERSIST CONFIG ---------- */
