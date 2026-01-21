@@ -6,9 +6,18 @@ export const loginUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const res = await API.post("/auth/login", credentials);
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem(
+        "user", 
+        JSON.stringify(res.data.user)
+      );
+
       return res.data; // { token, user }
-    } catch {
-      return rejectWithValue("Invalid email or password");
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Login failed"
+      );
     }
   }
 );

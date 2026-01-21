@@ -22,7 +22,13 @@ export default function Login() {
     e.preventDefault();
     const res = await dispatch(loginUser(form));
     if (res.meta.requestStatus === "fulfilled") {
-      navigate("/");
+      const user = res.payload;
+
+      if (user.isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/")
+      }
     }
   };
 
